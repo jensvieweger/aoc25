@@ -1,0 +1,77 @@
+fn parse_data(data: &Vec<String>) -> Option<Vec<u32>> {
+    let mut result:Vec<u32> = Vec::new();
+
+    for line in data {
+        result.push(1);
+    }
+    Some(result)
+}
+
+fn rotate(pos:u8, dist:i32) -> Option<u8> {
+    Some(pos+dist);
+    None
+}
+
+pub fn get_day01(data: &Vec<String>) -> Option<u32> {
+    None
+}
+
+#[cfg(test)]
+mod tests {
+    // Note this useful idiom: importing names from outer (for mod tests) scope.
+    use super::*;
+
+    fn fill_input() -> Vec<String> {
+        let mut data = Vec::new();
+        
+        data.push("L68".to_string());
+        data.push("L30".to_string());
+        data.push("R48".to_string());
+        data.push("L5".to_string());
+        data.push("R60".to_string());
+        data.push("L55".to_string());
+        data.push("L1".to_string());
+        data.push("L99".to_string());
+        data.push("R14".to_string());
+        data.push("L82".to_string());
+
+        data
+    }
+
+    #[test]
+    fn test_parse_data() {
+        let data = fill_input();
+
+        let parsed_data = parse_data(&data);
+
+        assert_eq!(parsed_data.is_none(), false);
+
+        let final_data=parsed_data.unwrap();
+    }
+
+    #[test]
+    fn test_get_day() {
+        let data = fill_input();
+
+        let day = get_day01(&data);
+
+        assert_eq!(day.is_none(), false);
+
+        let solution = day.unwrap();
+
+        assert_eq!(solution, 3);
+
+    }
+
+    #[test]
+    fn test_rotate() {
+        let position = 50;
+
+        let rot = rotate(position, 50);
+
+        assert_eq!(rot.is_none(), false);
+        let solution = rot.unwrap();
+        assert_eq!(solution, 0);
+
+    }
+}
