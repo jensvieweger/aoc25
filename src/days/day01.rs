@@ -1,3 +1,7 @@
+fn parse_string(line: &String) -> Option<i32> {
+    Some(1)
+}
+
 fn parse_data(data: &Vec<String>) -> Option<Vec<u32>> {
     let mut result:Vec<u32> = Vec::new();
 
@@ -8,8 +12,11 @@ fn parse_data(data: &Vec<String>) -> Option<Vec<u32>> {
 }
 
 fn rotate(pos:u8, dist:i32) -> Option<u8> {
-    Some(pos+dist);
-    None
+    let pos32 = pos as i32;
+    let check = (100+pos32+(dist % 100)) % 100;
+    print!("check: {}\n", check);
+    let dist_from_zero:u8 = (check).try_into().unwrap();
+    Some(dist_from_zero)
 }
 
 pub fn get_day01(data: &Vec<String>) -> Option<u32> {
@@ -40,6 +47,7 @@ mod tests {
 
     #[test]
     fn test_parse_data() {
+        {
         let data = fill_input();
 
         let parsed_data = parse_data(&data);
@@ -47,6 +55,7 @@ mod tests {
         assert_eq!(parsed_data.is_none(), false);
 
         let final_data=parsed_data.unwrap();
+        }
     }
 
     #[test]
@@ -65,13 +74,34 @@ mod tests {
 
     #[test]
     fn test_rotate() {
-        let position = 50;
 
-        let rot = rotate(position, 50);
+        {
+        let rot = rotate(50, 50);
 
         assert_eq!(rot.is_none(), false);
         let solution = rot.unwrap();
         assert_eq!(solution, 0);
+        }
+        {
+        let rot = rotate(50, -50);
 
+        assert_eq!(rot.is_none(), false);
+        let solution = rot.unwrap();
+        assert_eq!(solution, 0);
+        }
+                {
+        let rot = rotate(0, 50);
+
+        assert_eq!(rot.is_none(), false);
+        let solution = rot.unwrap();
+        assert_eq!(solution, 50);
+        }
+                {
+        let rot = rotate(0, -50);
+
+        assert_eq!(rot.is_none(), false);
+        let solution = rot.unwrap();
+        assert_eq!(solution, 50);
+        }
     }
 }
