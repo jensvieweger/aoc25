@@ -1,12 +1,22 @@
 fn parse_string(line: &String) -> Option<i32> {
-    Some(1)
+    let dist_str = &line[1..];
+    let dir = line.chars().next()?;
+    match dir {
+        'L' => Some(-dist_str.parse::<i32>().ok()?),
+        'R' => Some(dist_str.parse::<i32>().ok()?),
+        _ => None,
+    }
 }
 
-fn parse_data(data: &Vec<String>) -> Option<Vec<u32>> {
-    let mut result:Vec<u32> = Vec::new();
+fn parse_data(data: &Vec<String>) -> Option<Vec<i32>> {
+    let mut result:Vec<i32> = Vec::new();
 
     for line in data {
-        result.push(1);
+        let parsed_line = parse_string(line);
+        if parsed_line.is_none() {
+            return None;
+        }
+        result.push(parsed_line.unwrap());
     }
     Some(result)
 }
@@ -55,6 +65,9 @@ mod tests {
         assert_eq!(parsed_data.is_none(), false);
 
         let final_data=parsed_data.unwrap();
+
+        let expected_data:Vec<i32> = vec![-68, -30, 48, -5, 60, -55, -1, -99, 14, -82];
+        assert_eq!(final_data, expected_data);
         }
     }
 
