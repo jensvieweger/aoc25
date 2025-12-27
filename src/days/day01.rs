@@ -12,11 +12,9 @@ fn parse_data(data: &Vec<String>) -> Option<Vec<i32>> {
     let mut result:Vec<i32> = Vec::new();
 
     for line in data {
-        let parsed_line = parse_string(line);
-        if parsed_line.is_none() {
-            return None;
-        }
-        result.push(parsed_line.unwrap());
+        let parsed_line = parse_string(line)?;
+
+        result.push(parsed_line);
     }
     Some(result)
 }
@@ -30,7 +28,17 @@ fn rotate(pos:u8, dist:i32) -> Option<u8> {
 }
 
 pub fn get_day01(data: &Vec<String>) -> Option<u32> {
-    None
+    let parsed_data = parse_data(data)?;
+    let mut pos = 50;
+    let mut zeroes = 0;
+    for dist in parsed_data {
+        let new_pos = rotate(pos, dist)?;
+        pos = new_pos;
+        if pos == 0 {
+            zeroes += 1;
+        }
+    }
+    Some(zeroes)
 }
 
 #[cfg(test)]
