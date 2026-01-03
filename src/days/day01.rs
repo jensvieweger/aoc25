@@ -19,15 +19,29 @@ fn parse_data(data: &Vec<String>) -> Option<Vec<i32>> {
     Some(result)
 }
 
-fn rotate(pos:u8, dist:i32) -> Option<u8> {
+fn rotate(pos:u8, dist:i32) -> Option<(u8, u8)> {
     let pos32 = pos as i32;
     let check = (100+pos32+(dist % 100)) % 100;
     print!("check: {}\n", check);
     let dist_from_zero:u8 = (check).try_into().unwrap();
-    Some(dist_from_zero)
+    Some(dist_from_zero, 0)
 }
 
 pub fn get_day01(data: &Vec<String>) -> Option<u32> {
+    let parsed_data = parse_data(data)?;
+    let mut pos = 50;
+    let mut zeroes = 0;
+    for dist in parsed_data {
+        let (new_pos asd) = rotate(pos, dist)?;
+        pos = new_pos;
+        if pos == 0 {
+            zeroes += 1;
+        }
+    }
+    Some(zeroes)
+}
+
+pub fn get_day01_2(data: &Vec<String>) -> Option<u32> {
     let parsed_data = parse_data(data)?;
     let mut pos = 50;
     let mut zeroes = 0;
@@ -80,7 +94,7 @@ mod tests {
     }
 
     #[test]
-    fn test_get_day() {
+    fn test_get_day01() {
         let data = fill_input();
 
         let day = get_day01(&data);
@@ -93,6 +107,19 @@ mod tests {
 
     }
 
+    fn test_get_day01_2() {
+        let data = fill_input();
+
+        let day = get_day01_2(&data);
+
+        assert_eq!(day.is_none(), false);
+
+        let solution = day.unwrap();
+
+        assert_eq!(solution, 6);
+
+    }
+
     #[test]
     fn test_rotate() {
 
@@ -101,28 +128,28 @@ mod tests {
 
         assert_eq!(rot.is_none(), false);
         let solution = rot.unwrap();
-        assert_eq!(solution, 0);
+        assert_eq!(solution, (0, 0));
         }
         {
         let rot = rotate(50, -50);
 
         assert_eq!(rot.is_none(), false);
         let solution = rot.unwrap();
-        assert_eq!(solution, 0);
+        assert_eq!(solution, (0, 0));
         }
                 {
         let rot = rotate(0, 50);
 
         assert_eq!(rot.is_none(), false);
         let solution = rot.unwrap();
-        assert_eq!(solution, 50);
+        assert_eq!(solution, (50, 0));
         }
                 {
         let rot = rotate(0, -50);
 
         assert_eq!(rot.is_none(), false);
         let solution = rot.unwrap();
-        assert_eq!(solution, 50);
+        assert_eq!(solution, (50, 0));
         }
     }
 }
