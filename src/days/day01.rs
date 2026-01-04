@@ -21,10 +21,12 @@ fn parse_data(data: &Vec<String>) -> Option<Vec<i32>> {
 
 fn rotate(pos:u8, dist:i32) -> Option<(u8, u8)> {
     let pos32 = pos as i32;
-    let check = (100+pos32+(dist % 100)) % 100;
+    let small_dist = dist % 100;
+    let zeroes = (dist.abs() / 100) as u8;
+    let check = (100+pos32+small_dist) % 100;
     print!("check: {}\n", check);
     let dist_from_zero:u8 = (check).try_into().unwrap();
-    Some(dist_from_zero, 0)
+    Some((dist_from_zero, zeroes))
 }
 
 pub fn get_day01(data: &Vec<String>) -> Option<u32> {
@@ -32,7 +34,7 @@ pub fn get_day01(data: &Vec<String>) -> Option<u32> {
     let mut pos = 50;
     let mut zeroes = 0;
     for dist in parsed_data {
-        let (new_pos asd) = rotate(pos, dist)?;
+        let (new_pos, _zeroes_this_rot) = rotate(pos, dist)?;
         pos = new_pos;
         if pos == 0 {
             zeroes += 1;
@@ -44,10 +46,11 @@ pub fn get_day01(data: &Vec<String>) -> Option<u32> {
 pub fn get_day01_2(data: &Vec<String>) -> Option<u32> {
     let parsed_data = parse_data(data)?;
     let mut pos = 50;
-    let mut zeroes = 0;
+    let mut zeroes: u32 = 0;
     for dist in parsed_data {
-        let new_pos = rotate(pos, dist)?;
+        let (new_pos, zeroes_this_rot) = rotate(pos, dist)?;
         pos = new_pos;
+        zeroes += zeroes_this_rot as u32;
         if pos == 0 {
             zeroes += 1;
         }
@@ -107,6 +110,7 @@ mod tests {
 
     }
 
+    #[test]
     fn test_get_day01_2() {
         let data = fill_input();
 
